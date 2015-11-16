@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<!-- Coursera Course: html-css-javascript -->
+<!-- Introduction to JavaScript - Assessment Task: Matching Game -->
+<!-- Part 4: [Finishing the game] -->
+    <head>
+		<meta name="author" content="Joel Sequeira">
+		<title>Matching Game</title>
+		<style>
+			img {position:absolute;}
+			div {position:absolute;  width:500px; height:500px;}
+			#rightSide {left:500px; border-left:1px solid black;}
+		</style>
+		<script>
+			<!-- variable called numberOfFaces is created and set to the number 5 -->
+				var numberOfFaces = 5;
+			<!-- A function generateFaces() is created -->
+			function generateFaces(){
+				<!-- In this function the faces are created in a loop. The loop executes numberOfFaces times. -->
+				<!-- variable called theLeftSide is created. This points to the left side div -->
+				var theLeftSide = document.getElementById("leftSide");
+				<!-- variable called theRightSide is created. This points to the right side div -->
+				var theRightSide = document.getElementById("rightSide");
+				<!-- variable called theBody is created. This points to the body -->
+				var theBody = document.getElementsByTagName("body")[0];
+				for (var face = 0; face < numberOfFaces; face++){
+					<!-- In each iteration: -->
+					<!-- An img is created using createElement() -->
+					var img_smile = document.createElement("img"); 
+					<!-- The img src attribute is set so that the appropriate image filename is used -->
+					img_smile.src = "img/smile.png";
+					<!-- The position of an image is controlled by the top and left values. -->
+					<!-- The img top value is set to be a random value in an appropriate range. -->
+					var topPosiiton = Math.floor(Math.random() * 401);
+					img_smile.style.top = topPosiiton + "px";
+					<!-- The img left value is set to be a random value in an appropriate range. -->
+					var leftPosition = Math.floor(Math.random() * 401);
+					img_smile.style.left = leftPosition + "px";
+					<!-- Add the newly created image to the leftSide div using appendChild() -->
+					theLeftSide.appendChild(img_smile);
+					<!-- decrement numberOfFaces by 1 -->
+					//numberOfFaces--;
+				}
+				<!-- After all the images have been created and added to the leftSide div -->
+				<!-- copy the leftSide div -->
+				var leftSideImages = theLeftSide.cloneNode(true);
+				<!-- delete the last child of leftSideImages  -->
+				leftSideImages.removeChild(leftSideImages.lastChild);
+				<!-- add leftSideImages to the rightSide div -->
+				theRightSide.appendChild(leftSideImages);
+				<!-- add an onclick event handler function to the last child of the left side -->
+				theLeftSide.lastChild.onclick = function nextLevel(event){
+													<!-- in order to ensure that the event does not also get applied to other elements in the web page -->
+													event.stopPropagation();
+													<!-- increase the number stored in numberOfFaces by 5 -->
+													numberOfFaces += 5;
+													<!-- remove all faces from left side div -->
+													while (theLeftSide.firstChild) {
+														theLeftSide.removeChild(theLeftSide.firstChild);
+													}
+													<!-- remove all faces from right side div -->
+													while (theRightSide.firstChild) {
+														theRightSide.removeChild(theRightSide.firstChild);
+													}
+													<!-- generate a new set of faces -->
+													generateFaces();
+												};
+				<!-- add an event handler function to the body -->
+				theBody.onclick = function gameOver() {
+										<!--  show a message to the user -->
+										alert("Game Over!");
+										<!--  set web page body onclick to null -->
+										theBody.onclick = null;
+										<!--  set extra face onclick to null -->
+										theLeftSide.lastChild.onclick = null;
+								  }; 	
+			}
+        </script>
+    </head>
+	<body onload="generateFaces()">
+		<!-- Game title -->
+		<h1>Matching Game</h1>
+		<!-- message containing the instructions -->
+		<p>Click on the extra smiling face on the left.</p>
+		<!-- this will contain all the faces shown on the left side  -->
+		<div id="leftSide"></div>
+		<!--  this will contain all the faces shown on the right side  -->
+		<div id="rightSide"></div> 
+	
+	</body>
+</html>
